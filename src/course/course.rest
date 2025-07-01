@@ -1,0 +1,26 @@
+@defaultUrl = http://localhost:3000/course/
+
+### FindAll
+GET {{defaultUrl}}
+
+### FindOne
+GET {{defaultUrl}}52255ceb-1398-41ee-8687-124e4f9528be
+
+### Create
+POST {{defaultUrl}}
+Content-Type: application/json
+
+{
+    "course_name": "Math"
+}
+
+### Update
+PATCH {{defaultUrl}}4c9550a2-bc1b-42e5-8e52-f220f6e6cc2f
+Content-Type: application/json
+
+{
+    "course_name": "Math"
+}
+
+### Delete
+DELETE {{defaultUrl}}ac90d65e-7945-4146-bcc7-c715ae080872

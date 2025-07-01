@@ -21,8 +21,8 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
         password: config.get<string>('DATABASE_PASSWORD'),
         database: config.get<string>('DATABASE_DATABASE'),
         autoLoadEntities: config.get<boolean>('DATABASE_AUTOLOADENTITIES'),
-        synchronize: config.get<boolean>('DATABASE_SYNCHRONIZE')
-      })
+        synchronize: config.get<boolean>('DATABASE_SYNCHRONIZE'),
+      }),
     }),
     TeacherModule,
     StudentModule,
