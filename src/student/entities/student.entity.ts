@@ -1,7 +1,10 @@
+import { Course } from 'src/course/entities/course.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
+  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -25,4 +28,8 @@ export class Student {
 
   @UpdateDateColumn()
   updatedtAt: string;
+
+  @ManyToOne(() => Course, { onDelete: 'CASCADE', 'onUpdate': 'CASCADE'})
+  @JoinColumn({ name:  'course_id' })
+  course: Course;
 }
