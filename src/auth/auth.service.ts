@@ -10,7 +10,7 @@ export class AuthService {
     private readonly hashingService: HashingService,
   ) {}
 
-  async login(loginDto: LoginDto) {
+  async studentLogin(loginDto: LoginDto) {
     const student = await this.studentService.findByEmail(loginDto.email);
     if (!student) {
       return this.studentService.notFound();
