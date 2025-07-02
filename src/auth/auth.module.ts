@@ -4,10 +4,11 @@ import { AuthService } from './auth.service';
 import { StudentModule } from 'src/student/student.module';
 import { HashingService } from './hashing/hashing.service';
 import { BycryptService } from './hashing/bcrypt.service';
+import { TeacherModule } from 'src/teacher/teacher.module';
 
 @Global()
 @Module({
-  imports: [forwardRef(() => StudentModule)],
+  imports: [forwardRef(() => StudentModule), forwardRef(() => TeacherModule)],
   providers: [
     AuthService,
     {

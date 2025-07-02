@@ -20,7 +20,7 @@ export class Teacher {
   @Column({ type: 'varchar', length: 50, unique: true })
   teacher_email: string;
 
-  @Column({ type: 'varchar', length: 50 })
+  @Column({ type: 'varchar' })
   teacher_passwordHash: string;
 
   @CreateDateColumn()

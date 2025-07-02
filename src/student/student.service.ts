@@ -145,6 +145,11 @@ export class StudentService {
   }
 
   async findByEmail(email: string) {
+    const allStudents = await this.studentRepository.find();
+    if (allStudents.length === 0) {
+      return this.notFound();
+    }
+
     const student = await this.studentRepository.findOneBy({
       student_email: email,
     });

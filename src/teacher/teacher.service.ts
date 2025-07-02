@@ -9,6 +9,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Teacher } from './entities/teacher.entity';
 import { Repository } from 'typeorm';
 import { CourseService } from 'src/course/course.service';
+import { HashingService } from 'src/auth/hashing/hashing.service';
 
 @Injectable()
 export class TeacherService {
@@ -16,6 +17,7 @@ export class TeacherService {
     @InjectRepository(Teacher)
     private readonly teacherRepository: Repository<Teacher>,
     private readonly courseService: CourseService,
+    private readonly hashingService: HashingService,
   ) {}
 
   emptyArray() {
@@ -27,6 +29,10 @@ export class TeacherService {
   }
 
   async create(createTeacherDto: CreateTeacherDto) {
+    const passwordHash = await this.hashingService.hash(
+      createTeacherDto.teacher_passwordHash,
+    );
+
     const { course_id } = createTeacherDto;
     const course = await this.courseService.findOne(course_id);
 
@@ -37,7 +43,7 @@ export class TeacherService {
     const teacher = {
       teacher_name: createTeacherDto.teacher_name,
       teacher_email: createTeacherDto.teacher_email,
-      teacher_passwordHash: createTeacherDto.teacher_passwordHash,
+      teacher_passwordHash: passwordHash,
       course,
     };
 
@@ -142,5 +148,21 @@ export class TeacherService {
     await this.teacherRepository.remove(allteachers);
 
     return `All theachers were deleted.`;
+  }
+
+  async findByEmail(email: string) {
+    const allteachers = await this.teacherRepository.find();
+    if (allteachers.length === 0) {
+      return this.emptyArray();
+    }
+    const teacher = await this.teacherRepository.findOneBy({
+      teacher_email: email,
+    });
+
+    if (!teacher) {
+      return this.notFound();
+    }
+
+    return teacher;
   }
 }

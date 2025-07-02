@@ -11,8 +11,13 @@ export class AuthController {
     return 'k';
   }
 
-  @Post()
+  @Post('student')
   studentLogin(@Body() loginDto: LoginDto) {
     return this.authService.studentLogin(loginDto);
+  }
+
+  @Post('teacher')
+  teacherLogin(@Body() loginDto: LoginDto) {
+    return this.authService.teacherLogin(loginDto);
   }
 }
