@@ -9,6 +9,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Student } from './entities/student.entity';
 import { Repository } from 'typeorm';
 import { CourseService } from 'src/course/course.service';
+import { HashingService } from 'src/auth/hashing/hashing.service';
 
 @Injectable()
 export class StudentService {
@@ -24,9 +25,14 @@ export class StudentService {
     @InjectRepository(Student)
     private readonly studentRepository: Repository<Student>,
     private readonly courseService: CourseService,
+    private readonly hashingService: HashingService,
   ) {}
 
   async create(createStudentDto: CreateStudentDto) {
+    const passwordHash = await this.hashingService.hash(
+      createStudentDto.student_passwordHash,
+    );
+
     const { course_id } = createStudentDto;
     const course = await this.courseService.findOne(course_id);
 
@@ -37,7 +43,7 @@ export class StudentService {
     const newStudent = {
       student_name: createStudentDto.student_name,
       student_email: createStudentDto.student_email,
-      student_passwordHash: createStudentDto.student_passwordHash,
+      student_passwordHash: passwordHash,
       course,
     };
 
@@ -129,7 +135,24 @@ export class StudentService {
 
   async deleteAll() {
     const allStudents = await this.studentRepository.find();
+
+    if (allStudents.length === 0) {
+      return this.emptyArray();
+    }
+
     await this.studentRepository.remove(allStudents);
     return `All students were deleted.`;
+  }
+
+  async findByEmail(email: string) {
+    const student = await this.studentRepository.findOneBy({
+      student_email: email,
+    });
+
+    if (!student) {
+      return this.notFound();
+    }
+
+    return student;
   }
 }
