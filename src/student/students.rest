@@ -1,1 +1,25 @@
-@defaultUrl = http://localhost:3000/student
+@defaultUrl = http://localhost:3000/student/
+
+### FindAll
+GET {{defaultUrl}}
+
+### Create
+POST {{defaultUrl}}
+Content-Type: application/json
+
+{
+    "student_name": "Og Ne",
+    "student_email": "ognetosxs2ddd@email.com",
+    "student_passwordHash": "1xss456" 
+}
+
+### FindOne
+GET {{defaultUrl}}3436f0c3-1a0d-4a20-8ad8-a4bec42be932
+
+### Update
+PATCH {{defaultUrl}}04723ecb-08bb-40d2-905e-684ae2c9e1aa
+Content-Type: application/json
+
+{
+    "student_name": "Og Neto"
+}
