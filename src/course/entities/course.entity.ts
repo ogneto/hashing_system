@@ -23,9 +23,9 @@ export class Course {
   @UpdateDateColumn()
   updatedAt: string;
 
-  @OneToMany(()  => Student, (student) => (student.course))
+  @OneToMany(() => Student, (student) => student.course)
   students: Student[];
 
-  @OneToMany(() => Teacher, (teacher) => (teacher.course))
+  @OneToMany(() => Teacher, (teacher) => teacher.course)
   teachers: Teacher[];
 }

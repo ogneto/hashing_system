@@ -39,4 +39,9 @@ export class TeacherController {
   remove(@Param('id') id: string) {
     return this.teacherService.remove(id);
   }
+
+  @Delete()
+  deleteAll() {
+    return this.teacherService.deleteAll();
+  }
 }

@@ -42,10 +42,7 @@ export class CourseService {
       return this.emptyArray();
     }
 
-    return {
-      message: 'Courses:',
-      allCourses,
-    };
+    return allCourses;
   }
 
   async findOne(id: string) {
@@ -63,10 +60,7 @@ export class CourseService {
       return this.NotFound();
     }
 
-    return {
-      message: `Course:`,
-      course,
-    };
+    return course;
   }
 
   async update(id: string, updateCourseDto: UpdateCourseDto) {

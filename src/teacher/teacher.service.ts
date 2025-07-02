@@ -8,12 +8,14 @@ import { UpdateTeacherDto } from './dto/update-teacher.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Teacher } from './entities/teacher.entity';
 import { Repository } from 'typeorm';
+import { CourseService } from 'src/course/course.service';
 
 @Injectable()
 export class TeacherService {
   constructor(
     @InjectRepository(Teacher)
     private readonly teacherRepository: Repository<Teacher>,
+    private readonly courseService: CourseService,
   ) {}
 
   emptyArray() {
@@ -25,17 +27,26 @@ export class TeacherService {
   }
 
   async create(createTeacherDto: CreateTeacherDto) {
+    const { course_id } = createTeacherDto;
+    const course = await this.courseService.findOne(course_id);
+
+    if (!course) {
+      return this.courseService.NotFound();
+    }
+
     const teacher = {
       teacher_name: createTeacherDto.teacher_name,
       teacher_email: createTeacherDto.teacher_email,
       teacher_passwordHash: createTeacherDto.teacher_passwordHash,
+      course,
     };
 
     await this.teacherRepository.save(teacher);
 
     return {
       message: 'This teacher was created:',
-      teacher: teacher,
+      teacher_name: teacher.teacher_name,
+      teacher_course: teacher.course.course_name,
     };
   }
 
@@ -124,5 +135,12 @@ export class TeacherService {
       message: 'This teacher was deleted:',
       deleted_teacher: teacher,
     };
+  }
+
+  async deleteAll() {
+    const allteachers = await this.teacherRepository.find();
+    await this.teacherRepository.remove(allteachers);
+
+    return `All theachers were deleted.`;
   }
 }

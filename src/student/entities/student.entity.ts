@@ -29,7 +29,7 @@ export class Student {
   @UpdateDateColumn()
   updatedtAt: string;
 
-  @ManyToOne(() => Course, { onDelete: 'CASCADE', 'onUpdate': 'CASCADE'})
-  @JoinColumn({ name:  'course_id' })
+  @ManyToOne(() => Course, { onDelete: 'CASCADE', onUpdate: 'CASCADE' })
+  @JoinColumn({ name: 'course_id' })
   course: Course;
 }

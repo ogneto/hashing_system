@@ -2,6 +2,7 @@ import {
   IsEmail,
   IsNotEmpty,
   IsString,
+  IsUUID,
   MaxLength,
   MinLength,
 } from 'class-validator';
@@ -23,4 +24,7 @@ export class CreateStudentDto {
   @IsString()
   @MinLength(5)
   student_passwordHash: string;
+
+  @IsUUID()
+  course_id: string;
 }

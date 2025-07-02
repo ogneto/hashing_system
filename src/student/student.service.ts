@@ -8,6 +8,7 @@ import { UpdateStudentDto } from './dto/update-student.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Student } from './entities/student.entity';
 import { Repository } from 'typeorm';
+import { CourseService } from 'src/course/course.service';
 
 @Injectable()
 export class StudentService {
@@ -22,20 +23,30 @@ export class StudentService {
   constructor(
     @InjectRepository(Student)
     private readonly studentRepository: Repository<Student>,
+    private readonly courseService: CourseService,
   ) {}
 
   async create(createStudentDto: CreateStudentDto) {
+    const { course_id } = createStudentDto;
+    const course = await this.courseService.findOne(course_id);
+
+    if (!course) {
+      return this.courseService.NotFound();
+    }
+
     const newStudent = {
       student_name: createStudentDto.student_name,
       student_email: createStudentDto.student_email,
       student_passwordHash: createStudentDto.student_passwordHash,
+      course,
     };
 
     await this.studentRepository.save(newStudent);
 
     return {
-      message: 'Student created.',
-      student_created: newStudent,
+      message: 'This student was created',
+      student_name: newStudent.student_name,
+      studentd_course: course.course_name,
     };
   }
 
@@ -46,10 +57,7 @@ export class StudentService {
       return this.emptyArray();
     }
 
-    return {
-      message: 'All students:',
-      students: allStudents,
-    };
+    return allStudents;
   }
 
   async findOne(id: string) {
@@ -67,10 +75,7 @@ export class StudentService {
       return this.notFound();
     }
 
-    return {
-      message: `Student:`,
-      student: student,
-    };
+    return student;
   }
 
   async update(id: string, updateStudentDto: UpdateStudentDto) {
@@ -97,10 +102,7 @@ export class StudentService {
 
     await this.studentRepository.save(updatedStudent);
 
-    return {
-      message: 'Studentd updated:',
-      student_updated: updatedStudent,
-    };
+    return updatedStudent;
   }
 
   async remove(id: string) {
@@ -123,5 +125,11 @@ export class StudentService {
       message: 'This studentd was deleted:',
       student_deleted: student,
     };
+  }
+
+  async deleteAll() {
+    const allStudents = await this.studentRepository.find();
+    await this.studentRepository.remove(allStudents);
+    return `All students were deleted.`;
   }
 }

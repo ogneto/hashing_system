@@ -8,9 +8,10 @@ POST {{defaultUrl}}
 Content-Type: application/json
 
 {
-    "student_name": "Og Ne",
-    "student_email": "ognetosxs2ddd@email.com",
-    "student_passwordHash": "1xss456" 
+    "student_name": "Og Neto",
+    "student_email": "ogsnswestos@email.com",
+    "student_passwordHash": "1xss456",
+    "course_id": "90b15480-e58e-497b-ba53-827f61847f2a"
 }
 
 ### FindOne
@@ -26,3 +27,6 @@ Content-Type: application/json
 
 ### Delete
 DELETE {{defaultUrl}}0d0f5e83-587e-402d-a169-9279961f8670
+
+### DeleteAll
+DELETE {{defaultUrl}}
